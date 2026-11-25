@@ -8,6 +8,8 @@ import {
   productPill,
   setBusy,
 } from '../ui.js';
+import { createFrameManager } from '../frames-ui.js';
+import { prepareImage } from '../image.js';
 
 let cache = { products: [], categories: [] };
 
@@ -164,7 +166,6 @@ function openForm(product, root) {
   const isEdit = Boolean(product);
   const state = {
     image: product?.image || '',
-    spinFrames: product ? [...product.spinFrames] : [],
     sizes: product
       ? product.sizes.map((row) => ({ ...row }))
       : [
@@ -205,7 +206,7 @@ function openForm(product, root) {
             <input type="file" id="imageFile" accept="image/jpeg,image/png,image/webp,image/avif" hidden>
             <button class="abtn abtn--ghost" type="button" id="pickImage"><i class="fa-solid fa-upload"></i> UPLOAD FOTO</button>
             <input class="input" id="imageUrl" type="text" placeholder="atau tempel URL gambar" value="${escapeHtml(state.image)}">
-            <p class="image-field__hint">JPG / PNG / WEBP, maksimal 6MB. Rasio portrait paling optimal.</p>
+            <p class="image-field__hint">JPG / PNG / WEBP, maksimal 4MB. Foto otomatis dikompres sebelum diunggah.</p>
           </div>
         </div>
       </div>
@@ -267,16 +268,9 @@ function openForm(product, root) {
       </div>
 
       <div class="form-section span-2">
-        <div><h4>360° spin frames</h4><p>Unggah 24–36 foto berurutan dari berbagai sudut agar sepatu benar-benar dapat diputar.</p></div>
-        <div>
-          <input type="file" id="framesFile" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden>
-          <button class="abtn abtn--ghost abtn--sm" type="button" id="pickFrames"><i class="fa-solid fa-images"></i> UPLOAD FRAMES</button>
-        </div>
+        <div><h4>360° Image Manager</h4><p>Tarik 24–36 foto berurutan dari berbagai sudut. Urutan bisa diubah dengan drag and drop; foto ikut tersimpan bersama produk.</p></div>
       </div>
-      <div class="span-2">
-        <div class="frame-strip" id="frameStrip"></div>
-        <p class="editor-note" id="frameNote"></p>
-      </div>
+      <div class="span-2" id="frameManager"></div>
 
       <p class="form-error span-2" id="productError" style="grid-column:1/-1"></p>
 
@@ -349,28 +343,13 @@ function openForm(product, root) {
     }));
   };
 
-  const paintFrames = () => {
-    const strip = card.querySelector('#frameStrip');
-    const note = card.querySelector('#frameNote');
-    strip.innerHTML = state.spinFrames.length
-      ? state.spinFrames
-          .map(
-            (url, index) => `
-            <div class="frame-thumb">
-              <img src="${escapeHtml(url)}" alt="">
-              <button type="button" data-remove-frame="${index}" aria-label="Hapus frame"><i class="fa-solid fa-xmark"></i></button>
-            </div>`
-          )
-          .join('')
-      : '<span class="frame-empty">Belum ada frame. Viewer akan memakai simulasi turntable.</span>';
-    note.textContent = `${state.spinFrames.length} frame terunggah${
-      state.spinFrames.length >= 2 ? ' — rotasi 360° foto aktif.' : '.'
-    }`;
-  };
-
   paintSizes();
   paintColors();
-  paintFrames();
+
+  const frameManager = createFrameManager(card.querySelector('#frameManager'), {
+    productId: product?.id || 'draft',
+    frames: product?.spinFrames || [],
+  });
 
   sizeRows.addEventListener('input', updateTotal);
   sizeRows.addEventListener('click', (event) => {
@@ -406,13 +385,6 @@ function openForm(product, root) {
     paintColors();
   });
 
-  card.querySelector('#frameStrip').addEventListener('click', (event) => {
-    const remove = event.target.closest('[data-remove-frame]');
-    if (!remove) return;
-    state.spinFrames.splice(Number(remove.dataset.removeFrame), 1);
-    paintFrames();
-  });
-
   /* image upload */
   const imageFile = card.querySelector('#imageFile');
   const imagePreview = card.querySelector('#imagePreview');
@@ -425,7 +397,13 @@ function openForm(product, root) {
     const button = card.querySelector('#pickImage');
     setBusy(button, true, 'MENGUNGGAH…');
     try {
-      const [url] = await api.upload([file]);
+      const prepared = await prepareImage(file);
+      const [url] = await api.upload([prepared], {
+        productId: product?.id || 'draft',
+        onProgress: (ratio) => {
+          button.textContent = `MENGUNGGAH ${Math.round(ratio * 100)}%`;
+        },
+      });
       state.image = url;
       imagePreview.src = url;
       imageUrlInput.value = url;
@@ -444,27 +422,6 @@ function openForm(product, root) {
   };
   imageUrlInput.addEventListener('input', syncImageUrl);
   imageUrlInput.addEventListener('change', syncImageUrl);
-
-  /* spin frames upload */
-  const framesFile = card.querySelector('#framesFile');
-  card.querySelector('#pickFrames').addEventListener('click', () => framesFile.click());
-  framesFile.addEventListener('change', async () => {
-    const files = [...(framesFile.files || [])];
-    if (!files.length) return;
-    const button = card.querySelector('#pickFrames');
-    setBusy(button, true, 'MENGUNGGAH…');
-    try {
-      const urls = await api.upload(files.slice(0, 40));
-      state.spinFrames.push(...urls);
-      paintFrames();
-      toast(`${urls.length} frame ditambahkan.`);
-    } catch (error) {
-      toast(error.message, 'error');
-    } finally {
-      setBusy(button, false);
-      framesFile.value = '';
-    }
-  });
 
   /* submit */
   form.addEventListener('submit', async (event) => {
@@ -486,7 +443,7 @@ function openForm(product, root) {
       image: state.image.trim(),
       sizes: state.sizes.filter((row) => Number.isFinite(row.size) && row.size >= 30 && row.size <= 50),
       colors: state.colors.filter((color) => color.name),
-      spinFrames: state.spinFrames,
+      spinFrames: frameManager.getFrames(),
     };
 
     if (!payload.name) return (errorNode.textContent = 'Nama produk wajib diisi.');
@@ -500,6 +457,9 @@ function openForm(product, root) {
     }
     if (!payload.colors.length) {
       return (errorNode.textContent = 'Tambahkan minimal satu warna.');
+    }
+    if (frameManager.isUploading()) {
+      return (errorNode.textContent = 'Tunggu unggahan foto 360° selesai.');
     }
 
     const submit = form.querySelector('[type="submit"]');

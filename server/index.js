@@ -2,8 +2,20 @@
  * Local / Node-host runner.
  * The Express app itself lives in /app.js (also detected by Vercel).
  */
-import app from '../app.js';
-import { db } from './db.js';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const envFile = path.join(process.cwd(), '.env');
+if (!process.env.VERCEL && fs.existsSync(envFile) && typeof process.loadEnvFile === 'function') {
+  try {
+    process.loadEnvFile(envFile);
+  } catch (error) {
+    console.warn('[server] .env tidak dapat dibaca:', error.message);
+  }
+}
+
+const { default: app } = await import('../app.js');
+const { db } = await import('./db.js');
 
 const port = Number(process.env.PORT) || 3000;
 

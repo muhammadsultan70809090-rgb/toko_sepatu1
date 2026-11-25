@@ -49,13 +49,13 @@ export class SneakerViewer {
 
     if (this.badge) {
       this.badge.textContent =
-        this.mode === 'frames' ? `${this.frames.length} ANGLE FRAMES` : 'SIMULATED TURNTABLE';
+        this.mode === 'frames' ? `${this.frames.length} ANGLE FRAMES` : 'FOTO 360° BELUM TERSEDIA';
     }
     if (this.hint) {
       this.hint.textContent =
         this.mode === 'frames'
           ? 'Geser sepatu ke kiri atau kanan untuk memutar seluruh rangkaian foto sudut 360°.'
-          : 'Geser untuk memutar sepatu (turntable 3D). Unggah 24–36 foto sudut melalui dashboard admin untuk 360° foto asli.';
+          : 'Rotasi foto 360° belum tersedia untuk produk ini. Tampilan di atas adalah simulasi putaran — unggah 24–36 foto sudut melalui Dashboard Admin → 360° Image Manager.';
     }
     this.slider.value = 0;
     this.render();
@@ -99,7 +99,10 @@ export class SneakerViewer {
   render() {
     const angle = this.angle;
     if (this.mode === 'frames') {
-      const index = Math.round((angle / 360) * this.frames.length) % this.frames.length;
+      const index = Math.min(
+        this.frames.length - 1,
+        Math.floor((angle / 360) * this.frames.length)
+      );
       this.image.src = this.frames[index];
       if (this.angleLabel) {
         this.angleLabel.textContent = `${index + 1} / ${this.frames.length}`;

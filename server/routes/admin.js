@@ -1,12 +1,24 @@
 import { Router } from 'express';
-import { all, db, get, getSettings, run, saveSetting, serializeOrder, serializeProduct } from '../db.js';
+import {
+  all,
+  db,
+  get,
+  getSettings,
+  run,
+  saveSetting,
+  serializeOrder,
+  serializeProduct,
+  transaction,
+} from '../db.js';
 import { requireAuth, sameOrigin } from '../auth.js';
 import {
   createCategory,
   createProduct,
   deleteCategory,
   listProducts,
+  MAX_SPIN_FRAMES,
   parseProductPayload,
+  parseSpinFrames,
   updateCategory,
   updateProduct,
 } from '../catalog.js';
@@ -140,6 +152,39 @@ adminRouter.put('/products/:id', (req, res, next) => {
       id
     );
     res.json({ product: serializeProduct(row), message: 'Produk berhasil diperbarui.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* ---------------------------- 360° spin frames ---------------------------- */
+
+adminRouter.put('/products/:id/frames', (req, res, next) => {
+  try {
+    const id = integer(req.params.id, 'ID produk', { min: 1 });
+    if (!get('SELECT id FROM products WHERE id = ?', id)) {
+      throw new HttpError(404, 'Produk tidak ditemukan.');
+    }
+    const frames = parseSpinFrames(req.body?.frames);
+    if (!frames) throw new HttpError(400, 'Daftar frame wajib dikirim.');
+
+    transaction(() => {
+      run('DELETE FROM spin_frames WHERE product_id = ?', id);
+      frames.forEach((url, index) => {
+        run(
+          'INSERT INTO spin_frames (product_id, url, position) VALUES (?, ?, ?)',
+          id,
+          url,
+          index
+        );
+      });
+    });
+
+    res.json({
+      frames,
+      maxFrames: MAX_SPIN_FRAMES,
+      message: `${frames.length} foto 360° disimpan.`,
+    });
   } catch (error) {
     next(error);
   }

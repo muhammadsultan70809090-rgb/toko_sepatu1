@@ -17,6 +17,7 @@ import { storeRouter } from './server/routes/store.js';
 import { authRouter } from './server/routes/auth.js';
 import { adminRouter } from './server/routes/admin.js';
 import { uploadRouter, uploadDir } from './server/routes/upload.js';
+import { storageInfo } from './server/storage.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(__dirname, 'public');
@@ -36,10 +37,14 @@ app.use(express.urlencoded({ extended: false }));
 // Vercel Functions cannot use express.static() for deployed assets, and writable
 // storage lives in /tmp. Serve uploads through an explicit route so the same
 // code works locally and on Vercel.
-app.get('/uploads/:file', (req, res, next) => {
+app.get(['/uploads/:file', '/uploads/:product/:file'], (req, res, next) => {
   const name = path.basename(req.params.file);
   if (name !== req.params.file) return next();
-  const filePath = path.join(uploadDir, name);
+  const product = String(req.params.product || '');
+  if (product && product !== path.basename(product)) return next();
+  const filePath = product
+    ? path.join(uploadDir, product, name)
+    : path.join(uploadDir, name);
   fs.access(filePath, fs.constants.R_OK, (error) => {
     if (error) return next();
     res.setHeader('Cache-Control', 'public, max-age=604800');
@@ -53,7 +58,9 @@ app.use('/api/store', storeRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api', uploadRouter);
-app.get('/api/health', (req, res) => res.json({ ok: true, service: 'sneakerspace' }));
+app.get('/api/health', (req, res) =>
+  res.json({ ok: true, service: 'sneakerspace', storage: storageInfo() })
+);
 
 /* --------------------------------- pages ---------------------------------- */
 
@@ -108,7 +115,7 @@ app.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
     const message =
       error.code === 'LIMIT_FILE_SIZE'
-        ? 'Ukuran gambar maksimal 6MB per file.'
+        ? 'Ukuran gambar maksimal 4MB per file.'
         : 'Gagal mengunggah gambar. Periksa ukuran dan format file.';
     return res.status(400).json({ error: message });
   }

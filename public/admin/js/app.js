@@ -3,6 +3,7 @@ import { toast } from '/js/util.js';
 import { closeModal, handleAuthError } from './ui.js';
 import * as dashboard from './views/dashboard.js';
 import * as products from './views/products.js';
+import * as frames from './views/frames.js';
 import * as categories from './views/categories.js';
 import * as inventory from './views/inventory.js';
 import * as orders from './views/orders.js';
@@ -11,6 +12,7 @@ import * as settings from './views/settings.js';
 const sections = {
   dashboard: { label: 'Dashboard', kicker: 'Overview', render: dashboard.render },
   products: { label: 'Products', kicker: 'Catalog', render: products.render },
+  frames: { label: '360° Image Manager', kicker: 'Media', render: frames.render },
   categories: { label: 'Categories', kicker: 'Catalog', render: categories.render },
   inventory: { label: 'Inventory', kicker: 'Stock control', render: inventory.render },
   orders: { label: 'Orders', kicker: 'Operations', render: orders.render },

@@ -110,20 +110,48 @@ export function sameOrigin(req, res, next) {
   return res.status(403).json({ error: 'Permintaan ditolak: origin tidak dikenali.' });
 }
 
-export function ensureAdminAccount() {
-  const existing = get('SELECT COUNT(*) AS total FROM admins').total;
-  if (existing > 0) return;
-  const username = process.env.ADMIN_USERNAME || 'admin';
-  const password = process.env.ADMIN_PASSWORD || 'admin';
+const DEFAULT_ADMIN_PASSWORD = 'sultanaja03';
+
+function setAdminPassword(adminId, password) {
   const { salt, hash } = hashPassword(password);
-  run(
-    'INSERT INTO admins (username, password_hash, salt) VALUES (?, ?, ?)',
-    username,
-    hash,
-    salt
-  );
-  if (!process.env.ADMIN_PASSWORD) {
-    console.log('[auth] Akun admin demo dibuat (admin / admin).');
-    console.log('[auth] Untuk produksi set ADMIN_USERNAME dan ADMIN_PASSWORD sebelum seed pertama.');
+  run('UPDATE admins SET password_hash = ?, salt = ? WHERE id = ?', hash, salt, adminId);
+}
+
+export function ensureAdminAccount() {
+  const username = process.env.ADMIN_USERNAME || 'admin';
+  const password = process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD;
+  const existing = get('SELECT * FROM admins WHERE lower(username) = lower(?)', username);
+
+  if (!existing) {
+    const { salt, hash } = hashPassword(password);
+    run(
+      'INSERT INTO admins (username, password_hash, salt) VALUES (?, ?, ?)',
+      username,
+      hash,
+      salt
+    );
+    if (!process.env.ADMIN_PASSWORD) {
+      console.log(`[auth] Akun admin dibuat untuk username "${username}".`);
+      console.log('[auth] Set ADMIN_PASSWORD di environment untuk produksi.');
+    }
+    return;
+  }
+
+  if (process.env.ADMIN_PASSWORD) {
+    // Environment adalah sumber kebenaran saat dikonfigurasi.
+    if (!verifyPassword(password, existing.salt, existing.password_hash)) {
+      setAdminPassword(existing.id, password);
+      console.log('[auth] Password admin disinkronkan dari ADMIN_PASSWORD.');
+    }
+    return;
+  }
+
+  // Migrasi database lama yang masih memakai sandi demo "admin".
+  if (
+    verifyPassword('admin', existing.salt, existing.password_hash) &&
+    password !== 'admin'
+  ) {
+    setAdminPassword(existing.id, password);
+    console.log('[auth] Password admin demo diperbarui ke kredensial baru.');
   }
 }

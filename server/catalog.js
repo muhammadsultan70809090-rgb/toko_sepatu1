@@ -44,9 +44,8 @@ export function parseProductPayload(body = {}) {
   }
   if (!colors.length) throw new HttpError(400, 'Tambahkan minimal satu warna.');
 
-  const spinFrames = Array.isArray(body.spinFrames)
-    ? body.spinFrames.map((url) => safeUrl(url)).filter(Boolean).slice(0, 72)
-    : [];
+  // undefined = jangan sentuh frame yang sudah ada (dikelola 360° Image Manager).
+  const spinFrames = parseSpinFrames(body.spinFrames);
 
   return {
     name,
@@ -80,10 +79,28 @@ function writeRelations(productId, payload) {
   for (const color of payload.colors) {
     run('INSERT INTO product_colors (product_id, name, hex) VALUES (?, ?, ?)', productId, color.name, color.hex);
   }
-  run('DELETE FROM spin_frames WHERE product_id = ?', productId);
-  payload.spinFrames.forEach((url, index) => {
-    run('INSERT INTO spin_frames (product_id, url, position) VALUES (?, ?, ?)', productId, url, index);
-  });
+  if (payload.spinFrames) {
+    run('DELETE FROM spin_frames WHERE product_id = ?', productId);
+    payload.spinFrames.forEach((url, index) => {
+      run('INSERT INTO spin_frames (product_id, url, position) VALUES (?, ?, ?)', productId, url, index);
+    });
+  }
+}
+
+export const MAX_SPIN_FRAMES = 36;
+
+export function parseSpinFrames(value) {
+  if (value === undefined || value === null) return null;
+  if (!Array.isArray(value)) throw new HttpError(400, 'Daftar foto 360° tidak valid.');
+  const frames = [];
+  for (const entry of value) {
+    const url = safeUrl(entry);
+    if (url) frames.push(url);
+  }
+  if (frames.length > MAX_SPIN_FRAMES) {
+    throw new HttpError(400, `Maksimal ${MAX_SPIN_FRAMES} foto 360° per produk.`);
+  }
+  return frames;
 }
 
 export function createProduct(payload) {

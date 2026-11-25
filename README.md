@@ -7,6 +7,7 @@ Digital sneaker showroom + admin studio. Editorial campaign-style storefront, in
 - **Frontend** — HTML, CSS and native ES modules in `public/`
 - **Backend** — Express 4 (`server/`)
 - **Database** — SQLite via Node's built-in `node:sqlite` (`data/sneakerspace.db`, dibuat otomatis)
+- **Foto produk** — Cloudinary (URL publik permanen + optimasi otomatis); fallback ke disk lokal saat kredensial belum diatur
 
 ## Menjalankan
 
@@ -15,7 +16,7 @@ npm install
 npm start          # http://localhost:3000
 ```
 
-Node.js **22.5+** diperlukan karena memakai modul `node:sqlite`. Database dan data seed dibuat otomatis pada jalankan pertama.
+Node.js **22.5+** diperlukan karena memakai modul `node:sqlite`. Database dan data seed dibuat otomatis pada jalankan pertama. Runner lokal membaca `.env` di root proyek bila ada.
 
 ## Halaman
 
@@ -28,15 +29,32 @@ Node.js **22.5+** diperlukan karena memakai modul `node:sqlite`. Database dan da
 
 ## Admin
 
-Kredensial prototipe: **admin / admin**.
+Kredensial awal: **admin / sultanaja03**. Ganti lewat `ADMIN_PASSWORD` di environment; password di-hash dengan `scrypt` dan tidak pernah dikirim ke halaman login.
 
-Menu: Dashboard, Products, Categories, Inventory, Orders, Store Settings, Logout.
+Menu: Dashboard, Products, 360° Image Manager, Categories, Inventory, Orders, Store Settings, Logout.
 
-- **Products** — CRUD lengkap, unggah foto, editor ukuran + stok per ukuran, warna, dan 24–36 frame 360°.
+- **Products** — CRUD lengkap, unggah foto utama, editor ukuran + stok per ukuran, warna, dan 360° Image Manager.
+- **360° Image Manager** — pilih produk, tarik 24–36 foto (JPG/PNG/WEBP), urutkan dengan drag and drop atau tombol geser, ganti/hapus foto, dan periksa putaran lewat slider + drag. Indikator menampilkan `1 / 24` sampai `24 / 24`.
 - **Categories** — CRUD, jumlah produk per kategori; kategori yang masih dipakai tidak bisa dihapus.
 - **Inventory** — stok per ukuran EU, indikator stok menipis/habis, warna per produk.
 - **Orders** — pesanan dibuat saat checkout, status Pending → Diproses → Dikirim → Selesai / Dibatalkan. Pembatalan mengembalikan stok.
 - **Store Settings** — nama toko, logo teks/gambar, WhatsApp, kontak, announcement, hero, banner, dan teks about. Perubahan langsung tampil di storefront.
+
+Foto produk dikompres di browser (maksimal 1600px, WEBP) sebelum diunggah, dan Cloudinary menyajikan `f_auto,q_auto,c_limit` agar katalog tetap cepat.
+
+## Penyimpanan foto (Cloudinary)
+
+Buat akun Cloudinary, lalu isi environment berikut (lokal di `.env`, produksi di dashboard host):
+
+```bash
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+```
+
+Upload dilakukan server-side dengan signature; kredensial tidak pernah masuk ke frontend. Foto disimpan di folder `sneakerspace/products/<id produk>/`, dan URL-nya tersimpan di tabel `spin_frames` sesuai urutan.
+
+Tanpa kredensial Cloudinary, gambar disimpan di `UPLOAD_DIR` (lokal) dan aplikasi tetap berjalan — tetapi foto tidak permanen di host tanpa disk. Status penyimpanan terlihat di menu 360° Image Manager dan `/api/health`.
 
 ## Deploy
 
@@ -46,32 +64,29 @@ Repo sudah disiapkan untuk Vercel: entry Express ada di `app.js` (root) dan `ver
 
 1. Pastikan **Framework Preset** proyek = **Express** (atau biarkan `vercel.json` menimpanya).
 2. Deploy ulang. Folder `public/**` disajikan Vercel dari CDN; seluruh `/api/*` dilayani Express sebagai satu Vercel Function.
-3. Atur env `ADMIN_USERNAME`, `ADMIN_PASSWORD` di Project Settings → Environment Variables bila tidak ingin memakai kredensial demo.
+3. Tambahkan `ADMIN_USERNAME`, `ADMIN_PASSWORD`, dan tiga variabel `CLOUDINARY_*` di Project Settings → Environment Variables.
 
-> **Penting:** Vercel Functions hanya mengizinkan penulisan ke `/tmp`, dan penyimpanan itu tidak persisten. Di Vercel, database (`/tmp/sneakerspace/sneakerspace.db`) dan gambar unggahan akan kembali ke data seed ketika instance didaur ulang, dan beberapa instance bisa memiliki salinan berbeda. Cocok untuk preview/demo, bukan operasional toko.
->
-> Untuk produksi dengan data yang benar-benar persisten, deploy ke host Node dengan disk (Render, Railway, Fly.io) lalu set `DB_FILE=/data/sneakerspace.db`, `UPLOAD_DIR=/data/uploads`, dan `COOKIE_SECURE=1`.
+> **Penting:** Vercel Functions hanya bisa menulis ke `/tmp`, dan penyimpanan itu tidak persisten. Foto aman karena disimpan di Cloudinary, tetapi database (`/tmp/sneakerspace/sneakerspace.db`) kembali ke data seed ketika instance didaur ulang, dan beberapa instance bisa punya salinan berbeda. Vercel cocok untuk preview/demo, bukan operasional toko.
 
-### Host Node dengan disk persisten
+### Host Node dengan disk persisten (disarankan untuk toko)
+
+Render, Railway, atau Fly.io dengan volume/disk. Database dan sesi tetap persisten, dan foto memakai Cloudinary:
 
 ```bash
 npm install
-DB_FILE=/data/sneakerspace.db UPLOAD_DIR=/data/uploads \
-ADMIN_USERNAME=owner ADMIN_PASSWORD='sandi-kuat' COOKIE_SECURE=1 npm start
+DB_FILE=/data/sneakerspace.db \
+ADMIN_USERNAME=owner ADMIN_PASSWORD='sandi-kuat' \
+COOKIE_SECURE=1 \
+CLOUDINARY_CLOUD_NAME=... CLOUDINARY_API_KEY=... CLOUDINARY_API_SECRET=... \
+npm start
 ```
 
 ## Keamanan
 
-- Password admin di-hash dengan `scrypt` + salt; sesi disimpan di database dan dikirim sebagai cookie `HttpOnly`, `SameSite=Strict`.
+- Password admin di-hash dengan `scrypt` + salt; sesi disimpan di database dan dikirim sebagai cookie `HttpOnly`, `SameSite=Strict`, `Secure` saat HTTPS.
 - Semua endpoint admin memerlukan sesi; mutasi memeriksa `Origin` (same-origin).
 - Login dibatasi 8 percobaan per 10 menit per IP.
-- Untuk produksi, set `ADMIN_USERNAME` dan `ADMIN_PASSWORD` sebelum database pertama kali dibuat, lalu ganti kredensial demo:
-
-```bash
-ADMIN_USERNAME=owner ADMIN_PASSWORD='kata-sandi-kuat' npm start
-```
-
-Set `COOKIE_SECURE=1` bila dijalankan di belakang HTTPS. `PORT` dan `DB_FILE` juga dapat diatur lewat environment.
+- Set `ADMIN_USERNAME` dan `ADMIN_PASSWORD` yang kuat di produksi. Nilai `ADMIN_PASSWORD` disinkronkan ke akun admin saat server mulai.
 
 ## Struktur
 
@@ -79,24 +94,25 @@ Set `COOKIE_SECURE=1` bila dijalankan di belakang HTTPS. `PORT` dan `DB_FILE` ju
 app.js                # Express app + Vercel entry (export default app)
 vercel.json           # framework express, rewrites halaman statis
 server/
-  index.js            # runner lokal (app.listen)
+  index.js            # runner lokal (memuat .env, app.listen)
   db.js               # koneksi SQLite, schema, serializer
   seed.js             # data awal kategori, produk, pengaturan
-  auth.js             # hashing, sesi, rate limit, same-origin
-  catalog.js          # validasi + CRUD produk/kategori
+  auth.js             # hashing, sesi, rate limit, same-origin, migrasi sandi
+  catalog.js          # validasi + CRUD produk/kategori + frame 360°
+  storage.js          # Cloudinary / penyimpanan lokal
   validation.js
   routes/
     store.js          # katalog publik, detail produk, pembuatan pesanan
     auth.js           # login / logout / sesi
-    admin.js          # dashboard, produk, kategori, inventory, order, settings
-    upload.js         # unggah gambar produk/logo/banner
+    admin.js          # dashboard, produk, frame 360°, kategori, inventory, order, settings
+    upload.js         # unggah gambar dengan progress + validasi
 public/
   index.html, product.html, 404.html
   css/site.css
   js/                 # api, util, bag, viewer, home, product, card, site
-  admin/              # login.html, index.html, css, js/views/*
-uploads/              # file unggahan (dibuat saat runtime)
+  admin/              # login.html, index.html, css, js/views/*, frames-ui.js, image.js
+uploads/              # fallback penyimpanan lokal (dibuat saat runtime)
 ```
 
-Environment opsional: `PORT`, `DB_FILE`, `UPLOAD_DIR`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `COOKIE_SECURE`.
-Di Vercel, database dan upload otomatis diarahkan ke `/tmp` (sementara).
+Environment: `PORT`, `DB_FILE`, `UPLOAD_DIR`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `COOKIE_SECURE`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
+Di Vercel, database otomatis diarahkan ke `/tmp` (sementara).
