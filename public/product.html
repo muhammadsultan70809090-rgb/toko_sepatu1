@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c5a69">
+<title>Product — SneakerSpace</title>
+<meta name="description" content="Detail sneaker SneakerSpace: material, ukuran EU, warna, stok real-time, dan tampilan 360 derajat di dalam DETAIL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body class="site">
+<div class="grain" aria-hidden="true"></div>
+
+<div class="topbar">
+  <div class="topbar__track" id="ticker" aria-hidden="true"></div>
+</div>
+
+<header class="nav" id="nav">
+  <a class="logo" href="/" aria-label="SneakerSpace beranda">
+    <span id="logoText">SNEAKERSPACE</span><sup>®</sup>
+  </a>
+  <nav class="nav__links" aria-label="Navigasi utama">
+    <a href="/#showroom">Showroom</a>
+    <a href="/#categories">Categories</a>
+    <a href="/#collection">Collection</a>
+    <a href="/#about">About</a>
+  </nav>
+  <div class="nav__actions">
+    <button class="icon-btn nav__menu" id="navMenu" type="button" aria-label="Buka menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <button class="icon-btn" id="searchToggle" type="button" aria-label="Cari sneaker">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    <a class="nav__admin" href="/admin">Studio</a>
+    <button class="icon-btn bag-btn" id="openBag" type="button" aria-label="Buka tas belanja">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span class="bag-count" data-bag-count>0</span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu__top">
+    <span class="logo">SNEAKERSPACE<sup>®</sup></span>
+    <button class="icon-btn" type="button" data-close-menu aria-label="Tutup menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <a href="/">Home <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/#showroom">Showroom <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/#categories">Categories <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/#collection">Collection <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/#about">About <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/admin">Admin studio <i class="fa-solid fa-arrow-right-long"></i></a>
+</div>
+
+<main class="pd" id="pdRoot">
+  <div class="skeleton" style="height:52vh;margin-top:20px" aria-hidden="true"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <span class="logo logo--light">SNEAKERSPACE<sup>®</sup></span>
+      <p id="footerTagline">Discover your style. Define your steps.</p>
+      <div class="footer__social">
+        <a href="#" id="footerIg" aria-label="Instagram SneakerSpace"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" id="footerMail" aria-label="Email SneakerSpace"><i class="fa-solid fa-envelope"></i></a>
+        <a href="#" id="footerWa" aria-label="WhatsApp SneakerSpace"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer__col">
+      <h3>Navigate</h3>
+      <a href="/#showroom">Showroom</a>
+      <a href="/#categories">Categories</a>
+      <a href="/#collection">Collection</a>
+      <a href="/#about">About</a>
+    </div>
+    <div class="footer__col">
+      <h3>Visit</h3>
+      <p id="footerAddress">Jl. Senopati No. 24, Jakarta Selatan</p>
+      <p id="footerHours">Senin – Sabtu · 10.00 – 21.00 WIB</p>
+      <a href="/admin">Admin studio</a>
+    </div>
+    <div class="footer__col">
+      <h3>Contact</h3>
+      <p id="footerPhone">WhatsApp: 0821 2219 0680</p>
+      <p id="footerEmail">hello@sneakerspace.com</p>
+      <a href="#" id="footerWa2">Chat with us</a>
+    </div>
+  </div>
+  <div class="footer__wordmark" aria-hidden="true">SNEAKERSPACE</div>
+  <div class="footer__bottom">
+    <span>© 2026 SneakerSpace. All rights reserved.</span>
+    <span>Digital showroom — Jakarta, Indonesia</span>
+  </div>
+</footer>
+
+<aside class="bag" id="bag" aria-label="Tas belanja" aria-hidden="true"></aside>
+<div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+
+<script type="module" src="/js/product.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c5a69">
+<title>SneakerSpace — Digital Sneaker Showroom</title>
+<meta name="description" content="SneakerSpace adalah showroom sneaker digital: silhouette terkurasi, stok real-time, dan pengalaman berbelanja seperti kampanye sneaker premium.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body class="site">
+<div class="grain" aria-hidden="true"></div>
+
+<div class="topbar">
+  <div class="topbar__track" id="ticker" aria-hidden="true"></div>
+</div>
+
+<header class="nav" id="nav">
+  <a class="logo" href="/" aria-label="SneakerSpace beranda">
+    <span id="logoText">SNEAKERSPACE</span><sup>®</sup>
+  </a>
+  <nav class="nav__links" aria-label="Navigasi utama">
+    <a href="#showroom">Showroom</a>
+    <a href="#categories">Categories</a>
+    <a href="#collection">Collection</a>
+    <a href="#about">About</a>
+  </nav>
+  <div class="nav__actions">
+    <button class="icon-btn nav__menu" id="navMenu" type="button" aria-label="Buka menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <button class="icon-btn" id="searchToggle" type="button" aria-label="Cari sneaker">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    <a class="nav__admin" href="/admin">Studio</a>
+    <button class="icon-btn bag-btn" id="openBag" type="button" aria-label="Buka tas belanja">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span class="bag-count" data-bag-count>0</span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu__top">
+    <span class="logo">SNEAKERSPACE<sup>®</sup></span>
+    <button class="icon-btn" type="button" data-close-menu aria-label="Tutup menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <a href="/">Home <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="#showroom">Showroom <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="#categories">Categories <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="#collection">Collection <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="#about">About <i class="fa-solid fa-arrow-right-long"></i></a>
+  <a href="/admin">Admin studio <i class="fa-solid fa-arrow-right-long"></i></a>
+  <button class="btn btn--ink" type="button" data-close-menu>CLOSE MENU</button>
+</div>
+
+<main>
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <p class="hero__eyebrow" id="heroEyebrow">THE ART OF EVERYDAY STYLE</p>
+        <h1 class="hero__title" id="heroTitle">FIND YOUR<br>OWN <em>STEP.</em></h1>
+        <p class="hero__sub" id="heroSub">
+          Sebuah showroom digital untuk sneaker yang layak Anda kenakan. Silhouette terkurasi,
+          material terpilih, dan pasangan yang benar-benar mewakili langkah Anda.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--ink" href="#collection">EXPLORE COLLECTION <i class="fa-solid fa-arrow-right-long"></i></a>
+          <a class="btn btn--ghost" href="#showroom">ENTER SHOWROOM</a>
+        </div>
+        <dl class="hero__meta">
+          <div><dt>Featured</dt><dd id="heroFeaturedName">—</dd></div>
+          <div><dt>Drop</dt><dd>AW26 / 01</dd></div>
+          <div><dt>Atelier</dt><dd>Jakarta</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero__visual">
+        <span class="hero__index" aria-hidden="true">01</span>
+        <figure class="hero__plate">
+          <img id="heroImage" src="" alt="Sneaker unggulan SneakerSpace">
+          <figcaption id="heroCaption">AW26 CAMPAIGN — JAKARTA</figcaption>
+        </figure>
+        <div class="hero__stamp" aria-hidden="true">
+          <svg viewBox="0 0 120 120" role="presentation">
+            <defs><path id="stampPath" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"></path></defs>
+            <text><textPath href="#stampPath" startOffset="0">SNEAKERSPACE · 100% AUTHENTIC · CURATED IN JAKARTA · </textPath></text>
+          </svg>
+          <i class="fa-solid fa-arrow-down"></i>
+        </div>
+        <a class="hero__feature" id="heroFeature" href="#collection">
+          <span class="hero__feature-brand" id="heroFeatureBrand">—</span>
+          <strong id="heroFeatureName">—</strong>
+          <span class="hero__feature-price" id="heroFeaturePrice"></span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+    <a class="hero__scroll" href="#categories">SCROLL TO EXPLORE <span aria-hidden="true"></span></a>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
+
+  <section class="section" id="categories">
+    <div class="section__head">
+      <div>
+        <p class="kicker">01 — Shop by Category</p>
+        <h2 class="section__title">THE<br><em>SILHOUETTES</em></h2>
+      </div>
+      <p class="section__desc">
+        Enam kategori, satu bahasa desain. Telusuri rak kami berdasarkan cara Anda melangkah —
+        dari lintasan lari hingga trotoar kota.
+      </p>
+    </div>
+    <div class="cats" id="categoryGrid"></div>
+  </section>
+
+  <section class="showroom" id="showroom">
+    <div class="section__head section__head--light">
+      <div>
+        <p class="kicker">02 — Interactive Rack</p>
+        <h2 class="section__title">THE<br><em>SHOWROOM</em></h2>
+      </div>
+      <div class="rack__nav">
+        <button class="rack__btn" id="rackPrev" type="button" aria-label="Geser rak ke kiri">
+          <i class="fa-solid fa-arrow-left-long"></i>
+        </button>
+        <button class="rack__btn" id="rackNext" type="button" aria-label="Geser rak ke kanan">
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </div>
+    </div>
+    <p class="showroom__hint">Geser rak untuk menjelajah — pilih sepatu untuk membuka halaman detail.</p>
+    <div class="rack" id="rack" tabindex="0" aria-label="Rak sneaker interaktif"></div>
+    <div class="rack__progress" aria-hidden="true"><span id="rackBar"></span></div>
+  </section>
+
+  <section class="campaign" aria-labelledby="campaignTitle">
+    <img class="campaign__img" id="campaignImage" src="/assets/placeholder.svg" alt="Kampanye sneaker SneakerSpace AW26">
+    <div class="campaign__veil" aria-hidden="true"></div>
+    <div class="campaign__content">
+      <p class="kicker kicker--light">The Campaign — AW26</p>
+      <h2 id="campaignTitle">EVERY STEP<br><em>TELLS A STORY.</em></h2>
+      <p>Kampanye musim ini merayakan gerak sehari-hari: siluet bersih, material jujur, dan sepatu yang siap menemani Anda ke mana pun.</p>
+      <a class="btn btn--light" href="#collection">DISCOVER THE DROP <i class="fa-solid fa-arrow-right-long"></i></a>
+    </div>
+  </section>
+
+  <section class="section" id="collection">
+    <div class="section__head">
+      <div>
+        <p class="kicker">03 — Our Collection</p>
+        <h2 class="section__title">THE<br><em>PIECES</em></h2>
+      </div>
+      <p class="section__desc">
+        Setiap pasang diperiksa keasliannya. Stok diperbarui langsung dari dashboard toko.
+      </p>
+    </div>
+
+    <div class="filters">
+      <label class="filter filter--search">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="search" id="searchInput" placeholder="Cari nama atau merek…" autocomplete="off" aria-label="Cari produk">
+      </label>
+      <label class="filter">
+        <span>Category</span>
+        <select id="categoryFilter"><option value="All">All categories</option></select>
+      </label>
+      <label class="filter">
+        <span>Size</span>
+        <select id="sizeFilter"><option value="">All sizes</option></select>
+      </label>
+      <label class="filter">
+        <span>Colour</span>
+        <select id="colorFilter"><option value="">All colours</option></select>
+      </label>
+      <label class="filter">
+        <span>Sort</span>
+        <select id="sortFilter">
+          <option value="featured">Curated</option>
+          <option value="low">Price · Low to high</option>
+          <option value="high">Price · High to low</option>
+          <option value="newest">Newest</option>
+          <option value="name">Name · A–Z</option>
+        </select>
+      </label>
+      <button class="filter__reset" id="resetFilters" type="button">Reset</button>
+    </div>
+
+    <div class="collection__meta">
+      <span id="resultCount">Loading pieces…</span>
+      <span id="activeFilters"></span>
+    </div>
+
+    <div class="products" id="productGrid" aria-live="polite"></div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about__inner">
+      <p class="kicker kicker--light">04 — Our Philosophy</p>
+      <h2 class="about__title" id="aboutTitle">STEP INTO<br><em>YOUR WORLD.</em></h2>
+      <p class="about__text" id="aboutText">
+        SneakerSpace lahir dari keyakinan sederhana: sepasang sepatu bukan sekadar alas kaki,
+        melainkan pernyataan tentang siapa Anda.
+      </p>
+      <div class="about__stats">
+        <div><strong>06</strong><span>Curated categories</span></div>
+        <div><strong>100%</strong><span>Authenticity checked</span></div>
+        <div><strong>24H</strong><span>Jakarta delivery</span></div>
+      </div>
+      <a class="btn btn--light" href="#collection">FIND YOUR PAIR <i class="fa-solid fa-arrow-right-long"></i></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <span class="logo logo--light">SNEAKERSPACE<sup>®</sup></span>
+      <p id="footerTagline">Discover your style. Define your steps.</p>
+      <div class="footer__social">
+        <a href="#" id="footerIg" aria-label="Instagram SneakerSpace"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" id="footerMail" aria-label="Email SneakerSpace"><i class="fa-solid fa-envelope"></i></a>
+        <a href="#" id="footerWa" aria-label="WhatsApp SneakerSpace"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer__col">
+      <h3>Navigate</h3>
+      <a href="#showroom">Showroom</a>
+      <a href="#categories">Categories</a>
+      <a href="#collection">Collection</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="footer__col">
+      <h3>Visit</h3>
+      <p id="footerAddress">Jl. Senopati No. 24, Jakarta Selatan</p>
+      <p id="footerHours">Senin – Sabtu · 10.00 – 21.00 WIB</p>
+      <a href="/admin">Admin studio</a>
+    </div>
+    <div class="footer__col">
+      <h3>Contact</h3>
+      <p id="footerPhone">WhatsApp: 0821 2219 0680</p>
+      <p id="footerEmail">hello@sneakerspace.com</p>
+      <a href="#" id="footerWa2">Chat with us</a>
+    </div>
+  </div>
+  <div class="footer__wordmark" aria-hidden="true">SNEAKERSPACE</div>
+  <div class="footer__bottom">
+    <span>© 2026 SneakerSpace. All rights reserved.</span>
+    <span>Digital showroom — Jakarta, Indonesia</span>
+  </div>
+</footer>
+
+<aside class="bag" id="bag" aria-label="Tas belanja" aria-hidden="true"></aside>
+<div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+
+<script type="module" src="/js/home.js"></script>
+</body>
+</html>

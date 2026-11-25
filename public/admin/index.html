@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#181514">
+<title>Dashboard — SneakerSpace Studio</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/admin/css/admin.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body class="admin">
+<div class="admin-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <a class="logo" href="/" target="_blank" rel="noopener">SNEAKERSPACE<sup>®</sup></a>
+      <span>Admin Studio</span>
+    </div>
+    <nav class="sidebar__nav" aria-label="Navigasi admin">
+      <button class="sidebar__link" type="button" data-section="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+      <button class="sidebar__link" type="button" data-section="products"><i class="fa-solid fa-shoe-prints"></i> Products</button>
+      <button class="sidebar__link" type="button" data-section="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+      <button class="sidebar__link" type="button" data-section="inventory"><i class="fa-solid fa-boxes-stacked"></i> Inventory</button>
+      <button class="sidebar__link" type="button" data-section="orders"><i class="fa-solid fa-receipt"></i> Orders <span class="nav-badge" id="orderBadge"></span></button>
+      <button class="sidebar__link" type="button" data-section="settings"><i class="fa-solid fa-sliders"></i> Store Settings</button>
+    </nav>
+    <div class="sidebar__foot">
+      <a class="sidebar__store" href="/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> View store</a>
+      <button class="sidebar__logout" type="button" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+    </div>
+  </aside>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+  <div class="admin-main">
+    <header class="topbar-admin">
+      <div class="topbar-admin__left">
+        <button class="icon-action sidebar-toggle" id="sidebarToggle" type="button" aria-label="Buka menu admin">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <p class="kicker" id="pageKicker">Overview</p>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+      </div>
+      <div class="topbar-admin__right">
+        <span class="admin-chip"><i class="fa-solid fa-user-shield"></i> <span id="adminName">admin</span></span>
+      </div>
+    </header>
+
+    <main class="admin-view" id="adminView" aria-live="polite"></main>
+  </div>
+</div>
+
+<div class="admin-modal" id="adminModal" role="dialog" aria-modal="true"></div>
+<div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+
+<script type="module" src="/admin/js/app.js"></script>
+</body>
+</html>

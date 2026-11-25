@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#181514">
+<title>Admin Studio — SneakerSpace</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="/admin/css/admin.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body class="admin">
+<div class="login-layout">
+  <section class="login-visual" aria-hidden="true">
+    <div class="login-visual__top">
+      <span class="logo">SNEAKERSPACE<sup>®</sup></span>
+      <span class="login-visual__badge">Admin Studio</span>
+    </div>
+    <img class="login-visual__image" src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=80" alt="">
+    <div class="login-visual__body">
+      <h1>THE STORE,<br><em>BEHIND THE</em><br>SCENES.</h1>
+      <p>Kelola katalog, stok, dan pesanan SneakerSpace dari satu studio. Setiap perubahan langsung tampil di showroom pelanggan.</p>
+      <div class="login-visual__foot">
+        <span>Est. 2026 — Jakarta</span>
+        <span>AW26 / Studio</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="login-panel">
+    <div class="login-card">
+      <p class="kicker">Secure access</p>
+      <h2>Welcome back.</h2>
+      <p>Masuk ke dashboard administrator untuk mengelola operasional toko.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="afield">
+          <label for="username">Username</label>
+          <input class="input" id="username" name="username" type="text" autocomplete="username" placeholder="Masukkan username" required>
+        </div>
+        <div class="afield">
+          <label for="password">Password</label>
+          <div class="password-field">
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required>
+            <button type="button" id="togglePassword" aria-label="Tampilkan password">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <p class="form-error" id="loginError" role="alert"></p>
+        <button class="abtn abtn--primary" type="submit" id="loginBtn" style="width:100%;padding:13px">
+          LOGIN TO STUDIO <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </form>
+
+      <div class="demo-note">
+        <strong>Kredensial prototipe:</strong> username <strong>admin</strong> · password <strong>admin</strong>.<br>
+        Untuk produksi, atur <strong>ADMIN_USERNAME</strong> dan <strong>ADMIN_PASSWORD</strong> pada environment sebelum inisialisasi database, lalu ganti password demo.
+      </div>
+
+      <a class="login-back" href="/"><i class="fa-solid fa-arrow-left-long"></i> Back to showroom</a>
+    </div>
+  </section>
+</div>
+
+<script type="module" src="/admin/js/login.js"></script>
+</body>
+</html>

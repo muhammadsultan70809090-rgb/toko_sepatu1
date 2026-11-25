@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" role="img" aria-label="SneakerSpace placeholder">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4ece1"/>
+      <stop offset="1" stop-color="#dcc9b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="900" fill="url(#g)"/>
+  <g fill="none" stroke="#b39a86" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8">
+    <path d="M220 520c40-16 70-52 96-96 12-20 34-28 54-16l52 30c22 13 48 16 72 8l88-30c26-9 50 10 48 38l-6 82c-2 24-22 42-46 42H242c-24 0-40-22-32-44z"/>
+    <path d="M258 524l14 44M330 470l20 46M410 486l16 44"/>
+  </g>
+  <text x="400" y="700" text-anchor="middle" fill="#8b7565" font-family="Georgia, serif" font-size="34" letter-spacing="6">SNEAKERSPACE</text>
+  <text x="400" y="742" text-anchor="middle" fill="#a08b7a" font-family="Helvetica, sans-serif" font-size="15" letter-spacing="4">IMAGE COMING SOON</text>
+</svg>
