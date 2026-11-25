@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#b69b8a">
+<title>SneakerSpace | Premium Sneaker Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--taupe:#b69b8a;--beige:#d8c4b5;--cream:#f5f0e9;--dark:#242321;--brown:#806957;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark)}
+button,input,select{font:inherit}button{cursor:pointer}
+.navbar{height:78px;padding:0 7%;display:flex;align-items:center;justify-content:space-between;background:var(--cream);position:sticky;top:0;z-index:100;border-bottom:1px solid #24232118}
+.logo{font-family:'Oswald',sans-serif;font-size:27px;font-weight:700;letter-spacing:-1px}.logo span{color:var(--brown)}
+.nav-links{display:flex;gap:32px;list-style:none}.nav-links a{color:var(--dark);text-decoration:none;font-size:13px;font-weight:600}.nav-links a:hover{color:var(--brown)}
+.nav-actions{display:flex;align-items:center;gap:20px}.icon-btn{border:0;background:transparent;font-size:19px;color:var(--dark);position:relative}
+.cart-count{position:absolute;top:-9px;right:-10px;background:var(--brown);color:#fff;width:17px;height:17px;border-radius:50%;font-size:10px;display:grid;place-items:center}
+.hero{min-height:560px;background:var(--taupe);display:grid;grid-template-columns:1fr 1.1fr;align-items:center;padding:60px 9%;overflow:hidden}
+.hero-content{z-index:2}.hero-tag{font-size:11px;font-weight:700;letter-spacing:4px;margin-bottom:22px}
+.hero h1{font-family:'Oswald',sans-serif;font-size:clamp(55px,7vw,100px);line-height:.95;text-transform:uppercase;margin-bottom:25px}.hero h1 span{color:var(--cream)}
+.hero p{font-size:14px;line-height:1.8;max-width:390px;margin-bottom:30px;color:#352c27}
+.primary-btn{display:inline-flex;align-items:center;gap:12px;background:var(--dark);color:#fff;border:0;padding:15px 28px;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;transition:.3s}
+.primary-btn:hover{background:var(--brown);transform:translateY(-3px)}
+.hero-image{position:relative;height:430px}.hero-image img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 25px 20px #0002);animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.section{padding:85px 7%}.section-heading{display:flex;align-items:end;justify-content:space-between;margin-bottom:35px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--brown);margin-bottom:12px}
+.section-heading h2{font-family:'Oswald',sans-serif;font-size:42px;text-transform:uppercase}.section-heading p{color:#777;font-size:12px}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.category-card{height:130px;background:var(--beige);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;border:1px solid transparent;transition:.3s;color:var(--dark)}
+.category-card i{font-size:26px}.category-card span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.category-card:hover,.category-card.active{background:var(--dark);color:#fff}
+.rack-section{background:#e8ddd2;padding:85px 7%}
+.rack{display:flex;gap:25px;overflow-x:auto;padding:25px 10px 35px;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--brown) transparent}
+.rack-item{min-width:220px;text-align:center;cursor:pointer}.rack-item img{width:100%;height:170px;object-fit:contain;mix-blend-mode:multiply;transition:.4s}
+.rack-item:hover img{transform:translateY(-12px) rotate(-5deg)}.rack-item h3{font-family:'Oswald',sans-serif;font-size:17px;margin-top:12px;text-transform:uppercase}.rack-item p{font-size:12px;color:var(--brown)}
+.toolbar{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap}.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{width:100%;padding:14px 15px 14px 42px;background:#fff;border:1px solid #ded5cc;outline:none;font-size:12px}
+.search-box i{position:absolute;left:15px;top:15px;color:#777}.toolbar select{padding:12px 15px;background:#fff;border:1px solid #ded5cc;outline:none;font-size:12px}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.product-card{background:#fff;transition:.3s;cursor:pointer;overflow:hidden}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 15px 35px #00000014}
+.product-image{height:230px;background:#e9dfd5;position:relative;display:grid;place-items:center}.product-image img{width:90%;height:90%;object-fit:contain;mix-blend-mode:multiply;transition:.4s}
+.product-card:hover .product-image img{transform:scale(1.08)}.product-badge{position:absolute;top:15px;left:15px;background:var(--dark);color:#fff;padding:6px 10px;font-size:9px;font-weight:700}
+.product-info{padding:18px}.brand{font-size:10px;color:var(--brown);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.product-info h3{font-family:'Oswald',sans-serif;font-size:19px;margin:6px 0;text-transform:uppercase}.product-price{font-size:14px;font-weight:700;margin:10px 0}
+.product-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:15px}.product-bottom span{font-size:10px;color:#777}
+.add-btn{background:var(--dark);color:#fff;border:0;width:35px;height:35px;transition:.3s}.add-btn:hover{background:var(--brown)}
+.empty{grid-column:1/-1;text-align:center;padding:50px;color:#777}
+.about{background:var(--dark);color:#fff;padding:90px 9%;text-align:center}.about h2{font-family:'Oswald',sans-serif;font-size:48px;margin-bottom:20px}
+.about p{max-width:600px;margin:auto;color:#c7c0b9;font-size:13px;line-height:2}
+footer{background:#191817;color:#fff;padding:50px 7%}.footer-content{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+footer p{color:#aaa;font-size:12px;margin-top:12px}footer a{color:#ccc;text-decoration:none;font-size:12px}
+.copyright{border-top:1px solid #393633;margin-top:35px;padding-top:20px;font-size:10px;color:#999}
+
+/* EDITORIAL PRODUCT DETAIL – campaign-style full-screen view */
+.modal{
+  position:fixed;inset:0;background:rgba(30,23,28,.78);z-index:200;
+  display:none;justify-content:center;align-items:center;padding:24px;
+  backdrop-filter:blur(7px)
+}
+.modal.show{display:flex}
+.modal-content{
+  background:linear-gradient(125deg,#a88b9c 0%,#d7aebe 48%,#f2a5a0 100%);
+  width:min(1180px,100%);max-width:100%;height:min(690px,92vh);
+  max-height:92vh;overflow:hidden;display:grid;grid-template-columns:.9fr 1.1fr;
+  position:relative;box-shadow:0 30px 90px #0005;color:#fff
+}
+.modal-image{
+  grid-column:2;grid-row:1;min-height:0;position:relative;display:grid;place-items:center;
+  background:radial-gradient(ellipse at 55% 48%,rgba(255,231,238,.95) 0%,rgba(242,174,187,.42) 48%,transparent 73%);
+  padding:35px 25px 35px 0
+}
+.modal-image:after{
+  content:"";position:absolute;left:4%;right:5%;bottom:12%;
+  height:25px;border-radius:50%;background:rgba(67,35,48,.20);filter:blur(18px)
+}
+.modal-image .viewer-wrap{
+  position:relative;z-index:1;background:transparent!important;padding:0!important;
+  width:100%;max-width:650px;margin:0 auto
+}
+.viewer-stage{height:450px!important;overflow:visible!important}
+.viewer-stage img{
+  width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;
+  filter:drop-shadow(0 25px 17px rgba(53,28,39,.24));cursor:grab
+}
+.viewer-stage img:active{cursor:grabbing}
+.viewer-tag{
+  top:0;left:0;background:rgba(36,35,33,.78);border-radius:2px;
+  font-size:9px;letter-spacing:1.5px
+}
+.viewer-controls{position:relative;z-index:2;max-width:430px;margin:8px auto 0}
+.viewer-controls button{background:#242321;color:#fff;border-radius:2px}
+.viewer-controls input{accent-color:#fff}
+.viewer-count{color:#fff}
+.viewer-hint{color:#fff9;text-align:center;max-width:430px;margin:8px auto 0}
+.modal-info{
+  grid-column:1;grid-row:1;align-self:center;padding:65px 8% 55px 10%;
+  position:relative;z-index:3;max-height:100%;overflow-y:auto
+}
+.modal-info .brand{
+  color:#fff;font-size:12px;letter-spacing:3px;margin-bottom:22px
+}
+.modal-info .brand:before{content:"SNEAKERSPACE / FEATURED";display:block;font-size:9px;letter-spacing:3px;font-weight:700;opacity:.78;margin-bottom:20px}
+.modal-info h2{
+  font-family:'Oswald',sans-serif;font-size:clamp(42px,5vw,76px);
+  line-height:.98;letter-spacing:-1px;text-transform:uppercase;margin:0 0 18px;
+  max-width:470px;color:#fff
+}
+.modal-price{font-size:19px;font-weight:700;margin:18px 0;color:#fff}
+.modal-info p{font-size:13px;line-height:1.75;color:#fffE}
+.modal-info .option-label{color:#fff;margin:18px 0 9px;font-size:10px;letter-spacing:1.5px}
+.modal-info .size-btn{background:rgba(255,255,255,.78);border:1px solid #fff;color:#292326}
+.modal-info .size-btn.selected{background:#242321;color:#fff;border-color:#242321}
+.modal-info .color-btn{border-color:#fff;outline-color:#fff}
+.modal-info .color-btn.selected{outline:2px solid #242321}
+.modal-buy{
+  background:#fff;color:#242321;margin-top:24px;width:auto;min-width:190px;
+  justify-content:center;padding:16px 25px
+}
+.modal-buy:hover{background:#242321;color:#fff}
+.close{
+  position:absolute;right:22px;top:18px;border:0;background:rgba(36,35,33,.75);
+  color:#fff;font-size:25px;z-index:10;width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center
+}
+@media(max-width:700px){
+  .modal{padding:10px}
+  .modal-content{height:94vh;max-height:94vh;grid-template-columns:1fr;grid-template-rows:minmax(220px,38%) 1fr;overflow-y:auto}
+  .modal-image{grid-column:1;grid-row:1;padding:20px 15px 0;min-height:220px}
+  .viewer-stage{height:210px!important}
+  .viewer-controls{margin-top:2px}
+  .viewer-hint{font-size:9px;margin-top:4px}
+  .modal-info{grid-column:1;grid-row:2;padding:22px 25px 30px;overflow:visible}
+  .modal-info .brand{margin-bottom:8px;font-size:10px}
+  .modal-info h2{font-size:38px;margin-bottom:8px}
+  .modal-price{font-size:16px;margin:10px 0}
+  .modal-info p{font-size:11px}
+  .modal-info .option-label{margin:13px 0 8px}
+  .modal-buy{margin-top:16px;width:100%}
+  .close{right:13px;top:13px;width:36px;height:36px}
+}
+
+/* Campaign-inspired product detail actions and specification reveal */
+.modal-content{
+  background:linear-gradient(135deg,#73596d 0%,#c99daf 48%,#f3a4a0 100%);
+}
+.modal-image{
+  background:radial-gradient(ellipse at 58% 44%,rgba(255,231,242,.98) 0%,rgba(238,176,194,.55) 43%,rgba(241,157,153,.1) 74%);
+}
+.modal-image .viewer-stage img{
+  filter:drop-shadow(0 26px 18px rgba(54,24,39,.28));
+}
+.modal-info h2{
+  font-family:'DM Sans',sans-serif;
+  font-weight:800;
+  letter-spacing:-2px;
+  line-height:.98;
+  font-size:clamp(38px,4.4vw,66px);
+}
+.modal-info .brand:before{content:"SNEAKERSPACE";letter-spacing:4px}
+.modal-info .brand{font-size:12px;letter-spacing:3px}
+.modal-info .modal-price{font-size:18px}
+.modal-info #modalDescription{font-size:13px;max-width:390px}
+.modal-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.modal-actions .modal-buy{margin-top:0;width:auto;min-width:150px}
+.detail-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-width:130px;padding:16px 22px;border:1px solid rgba(255,255,255,.9);
+  background:transparent;color:#fff;font-size:11px;font-weight:800;
+  letter-spacing:1px;transition:.25s
+}
+.detail-btn:hover{background:#fff;color:#242321}
+.extra-details{
+  margin-top:18px;padding:16px;background:rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);
+}
+.extra-details[hidden]{display:none}
+.extra-details-head{font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:12px}
+.extra-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.extra-details-grid div{display:flex;flex-direction:column;gap:4px}
+.extra-details-grid span{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#fffB}
+.extra-details-grid strong{font-size:11px;color:#fff}
+.extra-details p{margin-top:12px;font-size:11px!important;color:#fff!important}
+.extra-details .viewer-stage{height:210px!important}
+.extra-details .viewer-stage img{max-height:210px}
+.extra-details .viewer-hint{font-size:10px}
+.extra-details .viewer-controls{margin-top:6px}
+
+
+@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr 1fr;padding:50px 5%}.hero h1{font-size:65px}}
+@media(max-width:600px){.navbar{padding:0 5%;height:65px}.logo{font-size:22px}.nav-links{display:none}
+.hero{grid-template-columns:1fr;text-align:center;padding:55px 7%}.hero p{margin-left:auto;margin-right:auto}.hero-image{height:260px}
+.section{padding:55px 5%}.section-heading h2{font-size:32px}.categories{grid-template-columns:repeat(2,1fr)}
+.products{gap:12px}.product-image{height:160px}.product-info{padding:12px}.product-info h3{font-size:16px}.product-price{font-size:12px}
+.modal-content{grid-template-columns:1fr}.modal-image{min-height:220px}.modal-image img{height:210px}.modal-info{padding:20px}
+.about h2{font-size:36px}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo">SNEAKER<span>SPACE.</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">HOME</a></li><li><a href="#rack">COLLECTION</a></li><li><a href="#products">SNEAKERS</a></li><li><a href="#about">ABOUT</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="icon-btn" onclick="openCart()" aria-label="Buka keranjang"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-tag">THE ART OF EVERYDAY STYLE</div>
+    <h1>FIND YOUR<br><span>OWN STEP.</span></h1>
+    <p>Discover sneakers that define your identity. Explore exclusive collections and find the perfect pair for every moment.</p>
+    <a href="#products" class="primary-btn">EXPLORE COLLECTION <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="hero-image"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1000" alt="Sneaker pilihan"></div>
+</section>
+
+<section class="section">
+  <div class="section-heading"><div><div class="eyebrow">EXPLORE OUR WORLD</div><h2>SHOP BY CATEGORY</h2></div></div>
+  <div class="categories">
+    <button class="category-card active" onclick="filterCategory('All',this)"><i class="fa-solid fa-shoe-prints"></i><span>All Sneakers</span></button>
+    <button class="category-card" onclick="filterCategory('Running Shoes',this)"><i class="fa-solid fa-person-running"></i><span>Running Shoes</span></button>
+    <button class="category-card" onclick="filterCategory('Basketball Shoes',this)"><i class="fa-solid fa-basketball"></i><span>Basketball</span></button>
+    <button class="category-card" onclick="filterCategory('Casual Sneakers',this)"><i class="fa-solid fa-shoe-prints"></i><span>Casual Sneakers</span></button>
+  </div>
+</section>
+
+<section class="rack-section" id="rack">
+  <div class="section-heading">
+    <div><div class="eyebrow">THE SNEAKER EXPERIENCE</div><h2>OUR SHOWROOM</h2><p>Explore our curated sneaker collection.</p></div>
+    <div><button class="icon-btn" onclick="scrollRack(-300)" aria-label="Geser ke kiri"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="icon-btn" onclick="scrollRack(300)" aria-label="Geser ke kanan"><i class="fa-solid fa-arrow-right"></i></button></div>
+  </div>
+  <div class="rack" id="rackItems"></div>
+</section>
+
+<section class="section" id="products">
+  <div class="section-heading"><div><div class="eyebrow">CURATED FOR YOU</div><h2>OUR COLLECTION</h2><p>Find the perfect sneaker for your style.</p></div></div>
+  <div class="toolbar">
+    <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="search" placeholder="Search sneakers or brands..." oninput="renderProducts()"></div>
+    <select id="categoryFilter" onchange="renderProducts()">
+      <option value="All">All Categories</option><option value="Running Shoes">Running Shoes</option><option value="Basketball Shoes">Basketball Shoes</option><option value="Casual Sneakers">Casual Sneakers</option><option value="Skate Shoes">Skate Shoes</option><option value="Lifestyle Sneakers">Lifestyle Sneakers</option><option value="Limited Edition">Limited Edition</option>
+    </select>
+    <select id="sortFilter" onchange="renderProducts()"><option value="default">Sort By</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option></select>
+  </div>
+  <div class="products" id="productList"></div>
+</section>
+
+<section class="about" id="about"><div class="eyebrow">OUR PHILOSOPHY</div><h2>STEP INTO YOUR WORLD.</h2><p>SneakerSpace is more than a sneaker store. We believe every step tells a story. Discover your style, express your identity, and make every step count.</p></section>
+
+<footer>
+  <div class="footer-content">
+    <div><div class="logo">SNEAKER<span>SPACE.</span></div><p>Discover your style. Define your steps.</p></div>
+    <div><h4>EXPLORE</h4><p><a href="#home">Home</a></p><p><a href="#rack">Collection</a></p><p><a href="#products">Products</a></p></div>
+    <div><h4>CONTACT</h4><p>WhatsApp: 0821-2219-0680</p><p>Email: hello@sneakerspace.com</p></div>
+  </div>
+  <div class="copyright">© 2026 SneakerSpace. All Rights Reserved.</div>
+</footer>
+
+<div class="modal" id="productModal">
+  <div class="modal-content">
+    <button class="close" onclick="closeModal()" aria-label="Tutup">&times;</button>
+    <div class="modal-image">
+      <img id="heroProductImage" src="" alt="Foto produk sneaker" style="width:100%;height:100%;max-height:520px;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 26px 18px rgba(54,24,39,.28));position:relative;z-index:1">
+    </div>
+    <div class="modal-info">
+      <div class="brand" id="modalBrand"></div><h2 id="modalName"></h2><div class="modal-price" id="modalPrice"></div>
+      <p id="modalDescription"></p><p id="modalMaterial" style="margin-top:8px"></p><p id="modalStock" style="margin-top:8px"></p>
+      <label class="option-label">SELECT SIZE (EU)</label><div class="sizes" id="modalSizes"></div>
+      <label class="option-label">SELECT COLOR</label><div class="colors" id="modalColors"></div>
+      <div class="modal-actions">
+        <button class="primary-btn modal-buy" onclick="addToCart()">ADD TO BAG <i class="fa-solid fa-bag-shopping"></i></button>
+        <button class="detail-btn" type="button" onclick="toggleExtraDetails()">DETAIL <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <div class="extra-details" id="extraDetails" hidden>
+        <div class="extra-details-head">PRODUCT DETAILS &amp; 360° VIEW</div>
+        <div class="viewer-wrap" style="width:100%;margin:0 0 14px;background:rgba(255,255,255,.12)!important;padding:10px!important">
+          <div class="viewer-stage" style="height:210px!important">
+            <span class="viewer-tag">360° PRODUCT VIEW</span>
+            <img id="modalImage" src="" alt="Tampilan putar 360 derajat produk">
+          </div>
+          <div class="viewer-controls">
+            <button type="button" onclick="stepViewer(-1)" aria-label="Putar ke kiri"><i class="fa-solid fa-rotate-left"></i></button>
+            <input id="viewerRange" type="range" min="0" max="35" value="0" step="1" oninput="setViewerFrame(Number(this.value))" disabled>
+            <button type="button" onclick="stepViewer(1)" aria-label="Putar ke kanan"><i class="fa-solid fa-rotate-right"></i></button>
+            <span class="viewer-count" id="viewerCount">1 / 1</span>
+          </div>
+          <p class="viewer-hint" id="viewerHint">Putaran 360° akan aktif jika foto dari berbagai sudut sudah ditambahkan.</p>
+        </div>
+        <div class="extra-details-grid">
+          <div><span>Brand</span><strong id="extraBrand">—</strong></div>
+          <div><span>Category</span><strong id="extraCategory">—</strong></div>
+          <div><span>Material</span><strong id="extraMaterial">—</strong></div>
+          <div><span>Availability</span><strong id="extraStock">—</strong></div>
+        </div>
+        <p id="extraDescription"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header"><h2>YOUR BAG</h2><button class="icon-btn" onclick="closeCart()" aria-label="Tutup keranjang">&times;</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-total"><div><span>TOTAL</span><span id="cartTotal">Rp0</span></div><button class="primary-btn" onclick="checkout()">ORDER VIA WHATSAPP <i class="fa-brands fa-whatsapp"></i></button></div>
+</div>
+
+<script>
+// Nomor WhatsApp toko: 082122190680 dalam format internasional Indonesia.
+const WHATSAPP_NUMBER = "6282122190680";
+
+// Untuk mengaktifkan rotasi 360° sungguhan, isi spinFrames dengan 24–36 URL foto
+// berurutan dari satu putaran penuh (misalnya foto_01.jpg sampai foto_36.jpg).
+// Contoh: spinFrames:["assets/nike-01.jpg","assets/nike-02.jpg", ...]
+const products = [
+ {id:1,name:"Air Force Classic",brand:"Nike",category:"Casual Sneakers",price:1500000,image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800",spinFrames:[],description:"Sneaker klasik dengan desain ikonik untuk gaya sehari-hari.",material:"Synthetic Leather",sizes:[39,40,41,42,43],colors:[{name:"Red",hex:"#a83232"},{name:"White",hex:"#fff"},{name:"Black",hex:"#242321"}],stock:12},
+ {id:2,name:"Urban Street",brand:"Adidas",category:"Lifestyle Sneakers",price:1250000,image:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800",spinFrames:[],description:"Sneaker lifestyle dengan tampilan modern dan nyaman.",material:"Mesh and Synthetic",sizes:[39,40,41,42,43],colors:[{name:"Cream",hex:"#e8d9c6"},{name:"Black",hex:"#242321"}],stock:8},
+ {id:3,name:"Classic Runner",brand:"New Balance",category:"Running Shoes",price:1800000,image:"https://images.unsplash.com/photo-1539185441755-769473a23570?w=800",spinFrames:[],description:"Sepatu lari dengan desain ergonomis untuk aktivitas harian.",material:"Mesh and Rubber",sizes:[40,41,42,43,44],colors:[{name:"Grey",hex:"#888"},{name:"White",hex:"#fff"}],stock:10},
+ {id:4,name:"Street Culture",brand:"Puma",category:"Skate Shoes",price:1100000,image:"https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800",spinFrames:[],description:"Sneaker dengan karakter streetwear dan desain versatile.",material:"Suede and Rubber",sizes:[39,40,41,42,43],colors:[{name:"Black",hex:"#242321"},{name:"White",hex:"#fff"}],stock:5},
+ {id:5,name:"Court Legend",brand:"Nike",category:"Basketball Shoes",price:2200000,image:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800",spinFrames:[],description:"Sepatu bergaya basket dengan desain sporty dan modern.",material:"Synthetic Leather",sizes:[40,41,42,43,44],colors:[{name:"White",hex:"#fff"},{name:"Black",hex:"#242321"}],stock:7},
+ {id:6,name:"Premium Classic",brand:"Converse",category:"Limited Edition",price:1350000,image:"https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?w=800",spinFrames:[],description:"Koleksi sneaker klasik dengan sentuhan desain premium.",material:"Canvas",sizes:[39,40,41,42],colors:[{name:"Black",hex:"#242321"},{name:"Cream",hex:"#e8d9c6"}],stock:4}
+];
+
+let selectedProduct=null,selectedSize=null,selectedColor=null,cart=[];
+let viewerFrame=0;
+function formatPrice(price){return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(price)}
+function renderProducts(){
+ const keyword=document.getElementById("search").value.toLowerCase(),category=document.getElementById("categoryFilter").value,sort=document.getElementById("sortFilter").value;
+ let filtered=products.filter(p=>(p.name.toLowerCase().includes(keyword)||p.brand.toLowerCase().includes(keyword))&&(category==="All"||p.category===category));
+ if(sort==="low")filtered.sort((a,b)=>a.price-b.price);if(sort==="high")filtered.sort((a,b)=>b.price-a.price);
+ const list=document.getElementById("productList");
+ if(!filtered.length){list.innerHTML='<div class="empty">Produk tidak ditemukan.</div>';return}
+ list.innerHTML=filtered.map(p=>`<article class="product-card" onclick="openProduct(${p.id})"><div class="product-image"><span class="product-badge">${p.category}</span><img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/500x400/e8ddd2/242321?text=Sneaker'"></div><div class="product-info"><div class="brand">${p.brand}</div><h3>${p.name}</h3><div class="product-price">${formatPrice(p.price)}</div><div class="product-bottom"><span>${p.stock>0?"In Stock":"Sold Out"}</span><button class="add-btn" onclick="event.stopPropagation();openProduct(${p.id})" aria-label="Pilih produk"><i class="fa-solid fa-plus"></i></button></div></div></article>`).join("");
+}
+function filterCategory(category,element){document.getElementById("categoryFilter").value=category;document.querySelectorAll(".category-card").forEach(btn=>btn.classList.remove("active"));element.classList.add("active");renderProducts()}
+function renderRack(){document.getElementById("rackItems").innerHTML=products.map(p=>`<div class="rack-item" onclick="openProduct(${p.id})"><img src="${p.image}" alt="${p.name}"><h3>${p.name}</h3><p>${formatPrice(p.price)}</p></div>`).join("")}
+function scrollRack(amount){document.getElementById("rackItems").scrollBy({left:amount,behavior:"smooth"})}
+
+// 360 VIEWER: gunakan 36 foto berurutan per produk pada properti spinFrames.
+function getViewerFrames(product){
+  return Array.isArray(product.spinFrames) ? product.spinFrames.filter(Boolean) : [];
+}
+function updateViewer(){
+  if(!selectedProduct)return;
+  const frames=getViewerFrames(selectedProduct);
+  const image=document.getElementById("modalImage");
+  const range=document.getElementById("viewerRange");
+  const count=document.getElementById("viewerCount");
+  const hint=document.getElementById("viewerHint");
+  if(frames.length){
+    viewerFrame=((viewerFrame%frames.length)+frames.length)%frames.length;
+    image.src=frames[viewerFrame];
+    range.max=frames.length-1;
+    range.value=viewerFrame;
+    range.disabled=false;
+    count.textContent=(viewerFrame+1)+" / "+frames.length;
+    hint.textContent="Geser slider atau gunakan tombol putar untuk melihat sepatu dari berbagai sudut.";
+  }else{
+    image.src=selectedProduct.image;
+    range.max=0;
+    range.value=0;
+    range.disabled=true;
+    count.textContent="1 / 1";
+    hint.textContent="Foto produk tersedia, tetapi rotasi 360° belum aktif. Tambahkan 24–36 foto berurutan dari berbagai sudut ke spinFrames produk ini agar dapat diputar secara nyata.";
+  }
+}
+function setViewerFrame(frame){
+  if(!selectedProduct)return;
+  const frames=getViewerFrames(selectedProduct);
+  if(!frames.length)return;
+  viewerFrame=Math.max(0,Math.min(frames.length-1,frame));
+  updateViewer();
+}
+function stepViewer(direction){
+  if(!selectedProduct)return;
+  const frames=getViewerFrames(selectedProduct);
+  if(!frames.length){
+    alert("Rotasi 360° untuk produk ini belum memiliki rangkaian foto dari berbagai sudut.");
+    return;
+  }
+  viewerFrame=(viewerFrame+direction+frames.length)%frames.length;
+  updateViewer();
+}
+
+function openProduct(id){
+ selectedProduct=products.find(p=>p.id===id);selectedSize=null;selectedColor=null;const p=selectedProduct;
+ viewerFrame=0;document.getElementById("extraDetails").hidden=true;document.getElementById("heroProductImage").src=p.image;document.getElementById("modalImage").src=p.image;document.getElementById("modalBrand").textContent=p.brand;document.getElementById("modalName").textContent=p.name;document.getElementById("modalPrice").textContent=formatPrice(p.price);document.getElementById("modalDescription").textContent=p.description;document.getElementById("modalMaterial").textContent="Material: "+p.material;document.getElementById("modalStock").textContent=p.stock>0?"Stok tersedia: "+p.stock:"Stok habis";
+ document.getElementById("modalSizes").innerHTML=p.sizes.map(s=>`<button class="size-btn" onclick="selectSize(${s},this)">${s}</button>`).join("");
+ document.getElementById("modalColors").innerHTML=p.colors.map(c=>`<button class="color-btn" title="${c.name}" style="background:${c.hex}" onclick="selectColor('${c.name}',this)"></button>`).join("");
+ updateViewer();document.getElementById("productModal").classList.add("show");
+}
+
+function toggleExtraDetails(){
+ const panel=document.getElementById("extraDetails");
+ if(!selectedProduct||!panel)return;
+ const p=selectedProduct;
+ document.getElementById("extraBrand").textContent=p.brand;
+ document.getElementById("extraCategory").textContent=p.category;
+ document.getElementById("extraMaterial").textContent=p.material;
+ document.getElementById("extraStock").textContent=p.stock>0?`${p.stock} tersedia`:"Habis";
+ document.getElementById("extraDescription").textContent=p.description;
+ panel.hidden=!panel.hidden;
+ if(!panel.hidden){updateViewer();panel.scrollIntoView({behavior:"smooth",block:"nearest"});}
+}
+
+function closeModal(){document.getElementById("productModal").classList.remove("show")}
+function selectSize(size,element){selectedSize=size;document.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));element.classList.add("selected")}
+function selectColor(color,element){selectedColor=color;document.querySelectorAll(".color-btn").forEach(b=>b.classList.remove("selected"));element.classList.add("selected")}
+function addToCart(){
+ if(!selectedProduct)return;if(selectedProduct.stock<=0){alert("Maaf, produk sedang habis.");return}
+ if(!selectedSize||!selectedColor){alert("Silakan pilih ukuran dan warna terlebih dahulu.");return}
+ const key=`${selectedProduct.id}-${selectedSize}-${selectedColor}`,existing=cart.find(item=>item.key===key);
+ if(existing){if(existing.qty>=selectedProduct.stock){alert("Jumlah melebihi stok yang tersedia.");return}existing.qty++}
+ else cart.push({key,product:selectedProduct,size:selectedSize,color:selectedColor,qty:1});
+ updateCart();closeModal();alert("Produk berhasil ditambahkan ke keranjang!");
+}
+function updateCart(){
+ document.getElementById("cartCount").textContent=cart.reduce((sum,item)=>sum+item.qty,0);
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map(item=>`<div class="cart-item"><img src="${item.product.image}" alt="${item.product.name}"><div><h4>${item.product.name}</h4><p>Size ${item.size} · ${item.color}</p><p>${item.qty} x ${formatPrice(item.product.price)}</p><button class="remove-btn" onclick="removeItem('${item.key}')">Remove</button></div></div>`).join(""):"<p>Keranjang masih kosong.</p>";
+ const total=cart.reduce((sum,item)=>sum+item.product.price*item.qty,0);document.getElementById("cartTotal").textContent=formatPrice(total);
+}
+function removeItem(key){cart=cart.filter(item=>item.key!==key);updateCart()}
+function openCart(){document.getElementById("cartPanel").classList.add("open")}
+function closeCart(){document.getElementById("cartPanel").classList.remove("open")}
+function checkout(){
+ if(!cart.length){alert("Keranjang masih kosong.");return}
+ const total=cart.reduce((sum,item)=>sum+item.product.price*item.qty,0);let message="Halo SneakerSpace! Saya ingin memesan:\n\n";
+ cart.forEach((item,index)=>{message+=`${index+1}. ${item.product.name}\nBrand: ${item.product.brand}\nUkuran: ${item.size} EU\nWarna: ${item.color}\nJumlah: ${item.qty}\nHarga: ${formatPrice(item.product.price*item.qty)}\n\n`});
+ message+=`TOTAL: ${formatPrice(total)}\n\nMohon konfirmasi ketersediaan produk. Terima kasih!`;
+ window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message),"_blank");
+}
+document.getElementById("productModal").addEventListener("click",e=>{if(e.target.id==="productModal")closeModal()});
+renderProducts();renderRack();updateCart();
+</script>
+</body>
+</html>
